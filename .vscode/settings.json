@@ -1,5 +1,6 @@
 {
-    "nrf-connect.applications": [
-        "${workspaceFolder}/blinky"
-    ]
+    "files.associations": {
+        "device.h": "c"
+    },
+    "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }
