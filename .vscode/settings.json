@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "device.h": "c"
+        "device.h": "c",
+        "remote.h": "c",
+        "bluetooth.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }
