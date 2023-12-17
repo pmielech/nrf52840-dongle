@@ -1,10 +1,10 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
-
+#include <zephyr/drivers/spi.h>
 
 #include "remote.h"
-
+#include "adc.h"
 
 //#include <zephyr/net/mqtt.h> not today...
 
@@ -19,27 +19,29 @@
 #define FLAGS   DT_GPIO_FLAGS(LED0_NODE, gpios)
 
 
+
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET_OR(LED0_NODE, gpios,
 							      {0});
-
+static uint16_t adc_val = 0;
+static uint32_t led_state_counter = 0;
 
 
 int main(void)
 {
 	int ret = 0;
 	ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT);
+	ret += initialize_adc();
 
 
 	ret += bluetooth_init();
 
-
 	while(true) 
 	{
+		adc_val = get_adc_val();
 		gpio_pin_toggle_dt(&led);
+		led_state_counter++;
 		k_sleep(K_SECONDS(1));
-		// gpio_pin_set_dt(&led, GPIO_ACTIVE_HIGH);
-		// gpio_pin_set_dt(&led, GPIO_ACTIVE_LOW);
-		// k_sleep(K_SECONDS(1));
+
 	}
 
     return 0;

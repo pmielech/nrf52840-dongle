@@ -2,7 +2,12 @@
     "files.associations": {
         "device.h": "c",
         "remote.h": "c",
-        "bluetooth.h": "c"
+        "bluetooth.h": "c",
+        "adc.h": "c",
+        "gpio.h": "c",
+        "gatt.h": "c",
+        "kernel.h": "c",
+        "nrf_saadc.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }
