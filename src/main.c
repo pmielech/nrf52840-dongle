@@ -30,14 +30,14 @@ int main(void)
 {
 	int ret = 0;
 	ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT);
-	ret += initialize_adc();
+	//ret += initialize_adc();
 
 
 	ret += bluetooth_init();
 
 	while(true) 
 	{
-		adc_val = get_adc_val();
+		//adc_val = get_adc_val();
 		gpio_pin_toggle_dt(&led);
 		led_state_counter++;
 		k_sleep(K_SECONDS(1));
