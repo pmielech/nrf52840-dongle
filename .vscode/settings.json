@@ -7,7 +7,9 @@
         "gpio.h": "c",
         "gatt.h": "c",
         "kernel.h": "c",
-        "nrf_saadc.h": "c"
+        "nrf_saadc.h": "c",
+        "spi.h": "c",
+        "i2c.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }
