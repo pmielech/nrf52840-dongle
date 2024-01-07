@@ -9,7 +9,9 @@
         "kernel.h": "c",
         "nrf_saadc.h": "c",
         "spi.h": "c",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "pcf8563.h": "c",
+        "rtc.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }

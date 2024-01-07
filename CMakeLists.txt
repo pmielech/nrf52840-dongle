@@ -16,6 +16,14 @@ target_sources(app PRIVATE
     src/user_peripherial/adc.c
 )
 
+target_sources(app PRIVATE 
+    src/user_peripherial/i2c.c
+)
+
+target_sources(app PRIVATE 
+    src/rtc/PCF8563.c
+)
+
 # add_custom_command(
 #     TARGET app
 #     POST_BUILD
@@ -25,3 +33,5 @@ target_sources(app PRIVATE
 
 zephyr_library_include_directories(src/remote_service)
 zephyr_library_include_directories(src/user_peripherial)
+zephyr_library_include_directories(src/rtc)
+
