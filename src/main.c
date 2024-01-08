@@ -3,7 +3,7 @@
 #include <zephyr/drivers/spi.h>
 // #include <zephyr/drivers/rtc.h>
 
-#include "i2c.h"
+#include "PCF8563.h"
 #include "common.h"
 #include "remote.h"
 #include "adc.h"
@@ -24,7 +24,7 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET_OR(LED0_NODE, gpios,
 							      {0});
 static uint16_t adc_val = 0;
 static uint32_t led_state_counter = 0;
-
+static uint16_t sys_cnt = 0;
 
 // const struct device *pcf = DEVICE_DT_GET_ANY();
 
@@ -39,6 +39,8 @@ int main(void)
     ret += init_i2c();
 
 	ret += bluetooth_init();
+	update_system_status(ret, 1);
+
 
 	if(ret > 0){
 
@@ -46,19 +48,32 @@ int main(void)
 
 	} else {
 
-		//PCF8563_Init();
-		//PCF8563_Set_Time(23,59,58);//Time
-		// PCF8563_Set_Alarm(0,0);//Alarm
-		// PCF8563_Set_Days(2021,9,28);//Days
-		// PCF8563_Set_Timer(1,10);//Timer 10S
+		
+		PCF8563_Init();
+		//PCF8563_Set_Days(2024, 1, 8);
+		PCF8563_Set_Time(22, 5, 0);
+		//update_date();
 
 
 		while(true) 
 		{
+
+			
 			//adc_val = get_adc_val();
 			gpio_pin_toggle_dt(&led);
-			led_state_counter++;
+			update_system_status(sys_cnt, 0);
+
 			k_sleep(K_SECONDS(1));
+
+			if(sys_cnt % 5 == 0){
+				//update_time();
+			}
+
+			if(sys_cnt >= 65534){
+				sys_cnt = 0;	
+			} else {
+				sys_cnt++;
+			}
 		}
 
 	}

@@ -1,20 +1,20 @@
 #include "PCF8563.h"
-
+#include "remote.h"
  
 /******************************************************************************
 i2C underlying read and write
 ******************************************************************************/
 void PCF8563_IIC_Write(uint8_t reg, uint8_t data)
 {
-    I2C_write_u(data, reg, sizeof(data) ,PCF8563_I2C_ADDR);
+    I2C_writeByte_u(data, reg, PCF8563_I2C_ADDR);
     k_sleep(K_SECONDS(0.1));
 }
 
 uint8_t PCF8563_IIC_Read(uint8_t reg)
 {
-    uint8_t err = (uint8_t)I2C_read_u(0, reg,  sizeof(0) ,PCF8563_I2C_ADDR);
+    uint8_t value = I2C_readByte_u(reg, PCF8563_I2C_ADDR);
     k_sleep(K_SECONDS(0.1));
-    return err;
+    return value;
 }
 
 /******************************************************************************
@@ -114,14 +114,17 @@ void PCF8563_Get_Days(uint8_t *buf)
     buf[1] = changeHexToInt(buf[1]);
     //buf[2] = changeHexToInt(buf[2]);
 
-    if (PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x80)
-    {
-        buf[3] = 19;
-    }
-    else
-    {
-        buf[3] = 20;
-    }
+    // if (PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x80)
+    // {
+    //     buf[3] = 19;
+    // }
+    // else
+    // {
+    //     buf[3] = 20;
+    // }
+
+
+
 }
 
 /******************************************************************************
@@ -150,9 +153,9 @@ void PCF8563_Get_Time(uint8_t *buf)
     buf[1] = PCF8563_IIC_Read(MINUTE_DATA_BUF) & 0x7f; //get minute data
     buf[2] = PCF8563_IIC_Read(HOUR_DATA_BUF) & 0x3f;   //get hour data
 
-    buf[0] = changeHexToInt(buf[0]);
-    buf[1] = changeHexToInt(buf[1]);
-    buf[2] = changeHexToInt(buf[2]);
+    // buf[0] = changeHexToInt(buf[0]);
+    // buf[1] = changeHexToInt(buf[1]);
+    // buf[2] = changeHexToInt(buf[2]);
 }
 
 /******************************************************************************

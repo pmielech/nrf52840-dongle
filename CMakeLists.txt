@@ -24,12 +24,6 @@ target_sources(app PRIVATE
     src/rtc/PCF8563.c
 )
 
-# add_custom_command(
-#     TARGET app
-#     POST_BUILD
-#     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/hex-edit.sh
-#     COMMENT "Running hex edit shell file..."
-# )
 
 zephyr_library_include_directories(src/remote_service)
 zephyr_library_include_directories(src/user_peripherial)
