@@ -29,8 +29,26 @@ static ssize_t read_test_char(struct bt_conn *conn, const struct bt_gatt_attr *a
 static ssize_t read_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                               void *buf, uint16_t len, uint16_t offset)
 {
+    update_date();
+    update_time();
     return bt_gatt_attr_read(conn, attr, buf, len, offset, date, (sizeof(date)*sizeof(uint8_t)));
 }
+
+
+static ssize_t write_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                          const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
+{
+    if (offset + len > sizeof(date)) {
+        return BT_GATT_ERR(BT_ATT_ERR_INVALID_OFFSET);
+    }
+
+    memcpy(&date[offset], buf, len);
+
+    write_userDate();
+    write_userTime();
+    return len;
+}
+
 
 static ssize_t read_system_status(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                               void *buf, uint16_t len, uint16_t offset)
@@ -52,9 +70,9 @@ BT_GATT_SERVICE_DEFINE(test_svc,
                            read_system_status, NULL, system_status),
 
     BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x6660),
-                           BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
-                           BT_GATT_PERM_READ,
-                           read_date, NULL, date),
+                            BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE,
+                            BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+                           read_date, write_date, date),
 );
 
 
@@ -84,6 +102,17 @@ void update_date(){
 void update_time(){
     PCF8563_Get_Time((date + 3));
 }
+
+void write_userDate(){
+		PCF8563_Set_Days(date[2], date[1], date[0]);
+	
+
+}
+
+void write_userTime(){
+		PCF8563_Set_Time(date[5], date[4], date[3]);
+}
+
 
 
 static void call_connected(struct bt_conn *conn, uint8_t err)

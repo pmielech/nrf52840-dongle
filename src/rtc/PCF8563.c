@@ -110,9 +110,9 @@ void PCF8563_Get_Days(uint8_t *buf)
     buf[1] = PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x1f;
     buf[2] = PCF8563_IIC_Read(YEAR_DATA_BUF) & 0xff;
 
-    // buf[0] = changeHexToInt(buf[0]);
-    // buf[1] = changeHexToInt(buf[1]);
-    //buf[2] = changeHexToInt(buf[2]);
+    buf[0] = changeHexToInt(buf[0]);
+    buf[1] = changeHexToInt(buf[1]);
+    buf[2] = changeHexToInt(buf[2]);
 
     // if (PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x80)
     // {
@@ -153,9 +153,9 @@ void PCF8563_Get_Time(uint8_t *buf)
     buf[1] = PCF8563_IIC_Read(MINUTE_DATA_BUF) & 0x7f; //get minute data
     buf[2] = PCF8563_IIC_Read(HOUR_DATA_BUF) & 0x3f;   //get hour data
 
-    // buf[0] = changeHexToInt(buf[0]);
-    // buf[1] = changeHexToInt(buf[1]);
-    // buf[2] = changeHexToInt(buf[2]);
+    buf[0] = changeHexToInt(buf[0]);
+    buf[1] = changeHexToInt(buf[1]);
+    buf[2] = changeHexToInt(buf[2]);
 }
 
 /******************************************************************************
