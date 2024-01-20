@@ -13,9 +13,9 @@ typedef void (*bt_ready_cb_t)(int err);
 
 //TODO: make globals
 
-static uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
-static uint8_t date[] = {0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour
-static uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
+uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
+uint8_t date[] = {0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour
+uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
 
 static struct bt_conn *default_conn;
 
@@ -77,12 +77,12 @@ void update_value(uint16_t value1, uint16_t value2, uint16_t value3){
 }
 
 void update_date(){
-    PCF8563_Get_Days(date[0]);
+    PCF8563_Get_Days(date);
 
 }
 
 void update_time(){
-    PCF8563_Get_Time(date[3]);
+    PCF8563_Get_Time((date + 3));
 }
 
 

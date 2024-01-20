@@ -38,7 +38,7 @@ uint8_t I2C_writeByte_u(uint8_t value, uint8_t reg, uint16_t addr){
 uint8_t I2C_readByte_u(uint8_t reg, uint16_t addr){
 
     uint8_t value = 0;
-    if(i2c_reg_read_byte(i2c0_device, addr, reg, value) != 0){
+    if(i2c_reg_read_byte(i2c0_device, addr, reg, &value) != 0){
         //TODO: error handling
     }
     return value;

@@ -110,8 +110,8 @@ void PCF8563_Get_Days(uint8_t *buf)
     buf[1] = PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x1f;
     buf[2] = PCF8563_IIC_Read(YEAR_DATA_BUF) & 0xff;
 
-    buf[0] = changeHexToInt(buf[0]);
-    buf[1] = changeHexToInt(buf[1]);
+    // buf[0] = changeHexToInt(buf[0]);
+    // buf[1] = changeHexToInt(buf[1]);
     //buf[2] = changeHexToInt(buf[2]);
 
     // if (PCF8563_IIC_Read(MONTH_DATA_BUF) & 0x80)

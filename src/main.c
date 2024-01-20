@@ -50,15 +50,14 @@ int main(void)
 
 		
 		PCF8563_Init();
-		//PCF8563_Set_Days(2024, 1, 8);
+		PCF8563_Set_Days(2024, 1, 8);
 		PCF8563_Set_Time(22, 5, 0);
-		//update_date();
+		update_date();
 
 
 		while(true) 
 		{
 
-			
 			//adc_val = get_adc_val();
 			gpio_pin_toggle_dt(&led);
 			update_system_status(sys_cnt, 0);
@@ -66,7 +65,7 @@ int main(void)
 			k_sleep(K_SECONDS(1));
 
 			if(sys_cnt % 5 == 0){
-				//update_time();
+				update_time();
 			}
 
 			if(sys_cnt >= 65534){
