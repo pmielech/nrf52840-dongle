@@ -49,10 +49,10 @@ int main(void)
 	} else {
 
 		
-		PCF8563_Init();
-		PCF8563_Set_Days(2024, 1, 8);
-		PCF8563_Set_Time(22, 5, 0);
-		update_date();
+		//PCF8563_Init();
+		// PCF8563_Set_Days(2024, 1, 8);
+		// PCF8563_Set_Time(22, 5, 0);
+
 
 
 		while(true) 
@@ -65,7 +65,6 @@ int main(void)
 			k_sleep(K_SECONDS(1));
 
 			if(sys_cnt % 5 == 0){
-				update_time();
 			}
 
 			if(sys_cnt >= 65534){

@@ -18,41 +18,22 @@ int init_i2c(void)
 	return 0;
 }
 
-int dupa(){
-    i2c_buffer[0] = 0x05;
-    i2c_buffer[1] = 0x02;
-    i2c_reg_write_byte(i2c0_device, 0x51, 0x05, 0x07);
-    //i2c_write(i2c0_device, i2c_buffer, 1, 0x51);
-    
-    return 0;
-}
 
 uint8_t I2C_writeByte_u(uint8_t value, uint8_t reg, uint16_t addr){
 
     return i2c_reg_write_byte(i2c0_device, addr, reg, value);
     
-    //return i2c_write(i2c0_device, i2c_buffer, num_bytes, addr);
-
 }
 
 uint8_t I2C_readByte_u(uint8_t reg, uint16_t addr){
 
     uint8_t value = 0;
     if(i2c_reg_read_byte(i2c0_device, addr, reg, &value) != 0){
-        //TODO: error handling
     }
     return value;
 
 }
 
-int dupa_read(){
-    i2c_buffer[0] = 0;
-    i2c_buffer[1] = 0;
-    i2c_reg_read_byte(i2c0_device, 0x51, 0x05, i2c_buffer);
-    //i2c_read(i2c0_device, i2c_buffer, 1, 0x51);
-    update_value(i2c_buffer[0], i2c_buffer[1], 0);
-    return 0;
-}
 
 
 // int read_rtc(uint8_t reg, uint8_t *data, size_t len)

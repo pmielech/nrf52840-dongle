@@ -23,6 +23,12 @@ async def get_values(address):
                 print(f"Value under {value_uuid[:9]}: {value}")
             except Exception as ex:
                 print(ex)
+        
+        write_value = [0, 0, 0, 0, 0, 1]
+        await client.write_gatt_char(
+            UINT8_UUID, 
+            bytearray(write_value), 
+            response=True)
 
 
 async def find_nrf():
