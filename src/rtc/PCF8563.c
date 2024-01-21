@@ -10,6 +10,17 @@ void PCF8563_IIC_Write(uint8_t reg, uint8_t data)
     k_sleep(K_SECONDS(0.1));
 }
 
+void PCF8563_IIC_Write_nd(uint8_t reg, uint8_t data)
+{
+    I2C_writeByte_u(data, reg, PCF8563_I2C_ADDR);
+}
+
+uint8_t PCF8563_IIC_Read_nd(uint8_t reg)
+{
+    uint8_t value = I2C_readByte_u(reg, PCF8563_I2C_ADDR);
+    return value;
+}
+
 uint8_t PCF8563_IIC_Read(uint8_t reg)
 {
     uint8_t value = I2C_readByte_u(reg, PCF8563_I2C_ADDR);
@@ -279,7 +290,8 @@ Info:
 ******************************************************************************/
 void PCF8563_Cleare_AF_Flag(void)
 {
-    PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xf7);
+    //PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xf7);
+    PCF8563_IIC_Write_nd(CTRL_BUF2, PCF8563_IIC_Read_nd(CTRL_BUF2) & 0xf7);
 }
 
 /******************************************************************************
@@ -289,7 +301,9 @@ Info:
 ******************************************************************************/
 void PCF8563_Cleare_TF_Flag(void)
 {
-    PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xfB);
+    //PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xfB);
+    PCF8563_IIC_Write_nd(CTRL_BUF2, PCF8563_IIC_Read_nd(CTRL_BUF2) & 0xfB);
+
 }
 
 /******************************************************************************

@@ -14,7 +14,7 @@ typedef void (*bt_ready_cb_t)(int err);
 //TODO: make globals
 
 uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
-uint8_t date[] = {0,0,0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour; timer hour, timer min
+uint8_t date[] = {0,0,0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour; timer conf, timer min
 uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
 
 static struct bt_conn *default_conn;
