@@ -27,8 +27,8 @@ void PCF8563_Init(void)
     //DEV_GPIO_Mode(INT_PIN, 0);     //INPT
     PCF8563_IIC_Write(0x00, 0x00); //basic setting
     PCF8563_IIC_Write(0x01, 0x00); //Disable INT
-    //PCF8563_Timer_Disable();
-    //PCF8563_Alarm_Disable();
+    PCF8563_Timer_Disable();
+    PCF8563_Alarm_Disable();
 }
 
 /******************************************************************************
@@ -229,19 +229,19 @@ void PCF8563_Set_Timer(int Timer_Frequency, uint8_t Value)
 {
     // PCF8563_IIC_Write(TIMER_CTRL_BUF, PCF8563_IIC_Read(TIMER_CTRL_BUF)&0x7f);
     PCF8563_IIC_Write(COUNT_VAL_BUF, Value);
-    if (Timer_Frequency == 4096)
+    if (Timer_Frequency == TIMER_FREQUENCY_4096)
     {
         PCF8563_IIC_Write(TIMER_CTRL_BUF, ((PCF8563_IIC_Read(TIMER_CTRL_BUF)) & 0xfc) | TIMER_FREQUENCY_4096);
     }
-    else if (Timer_Frequency == 64)
+    else if (Timer_Frequency == TIMER_FREQUENCY_64)
     {
         PCF8563_IIC_Write(TIMER_CTRL_BUF, ((PCF8563_IIC_Read(TIMER_CTRL_BUF)) & 0xfc) | TIMER_FREQUENCY_64);
     }
-    else if (Timer_Frequency == 1)
+    else if (Timer_Frequency == TIMER_FREQUENCY_1)
     {
         PCF8563_IIC_Write(TIMER_CTRL_BUF, ((PCF8563_IIC_Read(TIMER_CTRL_BUF)) & 0xfc) | TIMER_FREQUENCY_1);
     }
-    else if (Timer_Frequency == 0)
+    else if (Timer_Frequency == TIMER_FREQUENCY_1_60)
     { // 1/60
         PCF8563_IIC_Write(TIMER_CTRL_BUF, ((PCF8563_IIC_Read(TIMER_CTRL_BUF)) & 0xfc) | TIMER_FREQUENCY_1_60);
     }
@@ -257,8 +257,8 @@ Info:
 ******************************************************************************/
 void PCF8563_Timer_Enable(void)
 {
-    PCF8563_IIC_Write(0x01, (PCF8563_IIC_Read(0x01) | 0x01));
     PCF8563_IIC_Write(TIMER_CTRL_BUF, PCF8563_IIC_Read(TIMER_CTRL_BUF) | 0x80);
+    PCF8563_IIC_Write(CTRL_BUF2, (PCF8563_IIC_Read(0x01) | (0x01)));
 }
 
 /******************************************************************************
