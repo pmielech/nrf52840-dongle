@@ -1,7 +1,6 @@
 
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/spi.h>
-#include <zephyr/sys/util.h>
 
 // #include <zephyr/drivers/rtc.h>
 
@@ -11,8 +10,6 @@
 #include "adc.h"
 
 //#include <zephyr/net/mqtt.h> not today...
-
-#define SLEEP_TIME_MS   1
 
 #define BT_UUID_BAS BT_UUID_DECLARE_16(BT_UUID_BAS_VAL)
 
@@ -47,19 +44,25 @@ static struct gpio_dt_spec led = GPIO_DT_SPEC_GET_OR(DT_ALIAS(led0), gpios,
 static uint16_t sys_cnt = 0;
 
 
+uint8_t PROGRAM_SESSION = 0;
+
+
+
 void gpio_rtc_callback(const struct device *dev, struct gpio_callback *cb,
                    uint32_t pins)
 {
     gpio_pin_toggle_dt(&led);
-    
+    PROGRAM_SESSION = 1;
+
 }
 
 
 void button_pressed(const struct device *dev, struct gpio_callback *cb,
             uint32_t pins)
 {
-
+	PROGRAM_SESSION = 1u;
     gpio_pin_toggle_dt(&led);
+	sys_reboot();
 	//k_msleep(SLEEP_TIME_MS);
 
     
@@ -89,20 +92,23 @@ int gpio_init(){
     gpio_add_callback(rtc_int.port, &rtc_int_cb);
 
     if (led.port) {
-        ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT | GPIO_ACTIVE_LOW);
+        ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT | GPIO_OUTPUT_INACTIVE);
     }
 
 	return ret;
 }
 
+void deep_sleep(void)
+{
+    k_cpu_idle();
+}
+
+
+
 int main(void)
 {
 	int ret = 0;
 
-    ret += init_i2c();
-
-	ret += bluetooth_init();
-	
 	ret += gpio_init();
 
    
@@ -110,17 +116,29 @@ int main(void)
 	if(ret > 0){
 
 	while(true){
-
-
+		sys_reboot();
 	}
 
 	} else {
 
 		
-		PCF8563_Init();
+		//PCF8563_Init();
+
 
 		while(true) 
 		{
+			
+			deep_sleep();
+
+			if(PROGRAM_SESSION == 1u){
+				ret += init_i2c();
+				ret += bluetooth_init();
+				while (true)
+				{
+					k_msleep(10);
+				}
+			}
+
 
 			update_system_status(sys_cnt, 0);
 

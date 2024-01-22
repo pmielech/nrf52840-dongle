@@ -12,7 +12,8 @@
         "i2c.h": "c",
         "pcf8563.h": "c",
         "rtc.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "util.h": "c"
     },
     "nrf-connect.topdir": "${nrf-connect.sdk:2.5.0}"
 }

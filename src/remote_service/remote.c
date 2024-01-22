@@ -1,6 +1,6 @@
 #include "remote.h"
 #include "PCF8563.h"
-
+#include <zephyr/sys/util.h>
 
 static K_SEM_DEFINE(bt_init_ok, 1, 1);
 typedef void (*bt_ready_cb_t)(int err);
@@ -93,6 +93,8 @@ void update_value(uint16_t value1, uint16_t value2, uint16_t value3){
     
 }
 
+
+
 void configure_rtcData(void){
 
     if(date[2] != 0 || date[1] != 0 || date[0] != 0){
@@ -137,6 +139,8 @@ static void call_disconnected(struct bt_conn *conn, uint8_t reason)
         bt_conn_unref(default_conn);
         default_conn = NULL;
     }
+
+    sys_reboot();
 }
 
 
