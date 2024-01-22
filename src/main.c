@@ -128,7 +128,7 @@ int main(void)
 		while(true) 
 		{
 			
-			deep_sleep();
+        	k_cpu_idle();
 
 			if(PROGRAM_SESSION == 1u){
 				ret += init_i2c();
