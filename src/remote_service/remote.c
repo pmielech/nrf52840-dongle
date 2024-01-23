@@ -1,6 +1,6 @@
 #include "remote.h"
 #include "PCF8563.h"
-
+#include <zephyr/sys/util.h>
 
 static K_SEM_DEFINE(bt_init_ok, 1, 1);
 typedef void (*bt_ready_cb_t)(int err);
@@ -14,7 +14,7 @@ typedef void (*bt_ready_cb_t)(int err);
 //TODO: make globals
 
 uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
-uint8_t date[] = {0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour
+uint8_t date[] = {0,0,0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour; timer conf, timer min
 uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
 
 static struct bt_conn *default_conn;
@@ -29,8 +29,7 @@ static ssize_t read_test_char(struct bt_conn *conn, const struct bt_gatt_attr *a
 static ssize_t read_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                               void *buf, uint16_t len, uint16_t offset)
 {
-    update_date();
-    update_time();
+    update_datetime();
     return bt_gatt_attr_read(conn, attr, buf, len, offset, date, (sizeof(date)*sizeof(uint8_t)));
 }
 
@@ -44,8 +43,8 @@ static ssize_t write_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
 
     memcpy(&date[offset], buf, len);
 
-    write_userDate();
-    write_userTime();
+    configure_rtcData();
+
     return len;
 }
 
@@ -94,25 +93,31 @@ void update_value(uint16_t value1, uint16_t value2, uint16_t value3){
     
 }
 
-void update_date(){
-    PCF8563_Get_Days(date);
+
+
+void configure_rtcData(void){
+
+    if(date[2] != 0 || date[1] != 0 || date[0] != 0){
+        PCF8563_Set_Days(date[2], date[1], date[0]);
+        PCF8563_Set_Time(date[5], date[4], date[3]);
+    }
+
+    if(date[6] != 0 || date[7] != 0){
+        PCF8563_Set_Timer(date[6], date[7]);
+        PCF8563_Alarm_Enable();
+        PCF8563_Timer_Enable();
+
+    }
+    else{
+        PCF8563_Timer_Disable();
+    }
 
 }
 
-void update_time(){
+void update_datetime(void){
+    PCF8563_Get_Days(date);
     PCF8563_Get_Time((date + 3));
 }
-
-void write_userDate(){
-		PCF8563_Set_Days(date[2], date[1], date[0]);
-	
-
-}
-
-void write_userTime(){
-		PCF8563_Set_Time(date[5], date[4], date[3]);
-}
-
 
 
 static void call_connected(struct bt_conn *conn, uint8_t err)
@@ -133,7 +138,10 @@ static void call_disconnected(struct bt_conn *conn, uint8_t reason)
     if (default_conn) {
         bt_conn_unref(default_conn);
         default_conn = NULL;
+        // sys_reboot();
+
     }
+
 }
 
 

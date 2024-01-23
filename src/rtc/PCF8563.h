@@ -67,3 +67,5 @@ void PCF8563_CLKOUT_FrequencyHZ(uint16_t Frequency);
 
 void PCF8563_CLKOUT_Disable(void);
 void PCF8563_CLKOUT_Enable(void);
+void PCF8563_IIC_Write_nd(uint8_t reg, uint8_t data);
+uint8_t PCF8563_IIC_Read_nd(uint8_t reg);
