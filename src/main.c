@@ -22,6 +22,12 @@
 #error "Unsupported board: sw0 devicetree alias is not defined"
 #endif
 
+#define GPIO_POW_NODE    DT_NODELABEL(power)
+#if !DT_NODE_HAS_STATUS(GPIO_POW_NODE, okay)
+#error "Unsupported board: sw0 devicetree alias is not defined"
+#endif
+
+
 #define GPIO_INTER_NODE    DT_NODELABEL(butt1)
 #if !DT_NODE_HAS_STATUS(GPIO_INTER_NODE, okay)
 #error "Unsupported board: sw0 devicetree alias is not defined"
@@ -38,6 +44,9 @@ static struct gpio_callback rtc_int_cb;
 static const struct gpio_dt_spec rtc_int = GPIO_DT_SPEC_GET_OR(GPIO_INTER_NODE, gpios,
                                   {0});
 
+static const struct gpio_dt_spec pow_gpio = GPIO_DT_SPEC_GET_OR(GPIO_POW_NODE, gpios,
+                                  {0});
+
 static struct gpio_dt_spec led = GPIO_DT_SPEC_GET_OR(DT_ALIAS(led0), gpios,
                              {0});
 
@@ -52,6 +61,7 @@ void gpio_rtc_callback(const struct device *dev, struct gpio_callback *cb,
                    uint32_t pins)
 {
     gpio_pin_toggle_dt(&led);
+	// gpio_pin_toggle_dt(&pow_gpio);
     PROGRAM_SESSION = 1;
 
 }
@@ -94,6 +104,9 @@ int gpio_init(){
     if (led.port) {
         ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT | GPIO_OUTPUT_INACTIVE);
     }
+	// if(pow_gpio.port){
+	// 	ret += gpio_pin_configure_dt(&led, GPIO_OUTPUT | GPIO_OUTPUT_INACTIVE);
+	// }
 
 	return ret;
 }

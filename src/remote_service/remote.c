@@ -138,8 +138,8 @@ static void call_disconnected(struct bt_conn *conn, uint8_t reason)
     if (default_conn) {
         bt_conn_unref(default_conn);
         default_conn = NULL;
+        // sys_reboot();
 
-        sys_reboot();
     }
 
 }
