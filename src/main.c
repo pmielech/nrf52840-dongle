@@ -111,12 +111,20 @@ int gpio_init(){
 	return ret;
 }
 
-void deep_sleep(void)
-{
-    k_cpu_idle();
+
+void normal_mode_loop(int *ret){
+	*ret += init_i2c();
+	*ret += bluetooth_init();
+
+	while (true)
+	{
+		k_msleep(10);
+
+
+	}
+
+	
 }
-
-
 
 int main(void)
 {
@@ -135,7 +143,7 @@ int main(void)
 	} else {
 
 		
-		//PCF8563_Init();
+		PCF8563_Init();
 
 
 		while(true) 
@@ -144,12 +152,7 @@ int main(void)
         	k_cpu_idle();
 
 			if(PROGRAM_SESSION == 1u){
-				ret += init_i2c();
-				ret += bluetooth_init();
-				while (true)
-				{
-					k_msleep(10);
-				}
+				normal_mode_loop(&ret);
 			}
 
 

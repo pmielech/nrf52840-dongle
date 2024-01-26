@@ -1,5 +1,6 @@
 #include "remote.h"
 #include "PCF8563.h"
+#include "tmp102.h"
 #include <zephyr/sys/util.h>
 
 static K_SEM_DEFINE(bt_init_ok, 1, 1);
@@ -15,6 +16,8 @@ typedef void (*bt_ready_cb_t)(int err);
 
 uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
 uint8_t date[] = {0,0,0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour; timer conf, timer min
+uint8_t sense[] = {0,0};          // => temp
+
 uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
 
 static struct bt_conn *default_conn;
@@ -31,6 +34,13 @@ static ssize_t read_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
 {
     update_datetime();
     return bt_gatt_attr_read(conn, attr, buf, len, offset, date, (sizeof(date)*sizeof(uint8_t)));
+}
+
+static ssize_t read_sense(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                              void *buf, uint16_t len, uint16_t offset)
+{
+    update_sense();
+    return bt_gatt_attr_read(conn, attr, buf, len, offset, sense, (sizeof(date)*sizeof(uint8_t)));
 }
 
 
@@ -72,6 +82,10 @@ BT_GATT_SERVICE_DEFINE(test_svc,
                             BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE,
                             BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
                            read_date, write_date, date),
+    BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x6600),
+                           BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
+                           BT_GATT_PERM_READ,
+                           read_sense, NULL, sense),
 );
 
 
@@ -110,6 +124,19 @@ void configure_rtcData(void){
     }
     else{
         PCF8563_Timer_Disable();
+    }
+
+}
+
+void update_sense(void){
+    uint8_t buf[2];
+
+    if(tmp102_readTempC(buf) == 0){
+        sense[0] = buf[0];
+        sense[1] = buf[1];
+    } else {
+        sense[0] = 0;
+        sense[1] = 0;
     }
 
 }
