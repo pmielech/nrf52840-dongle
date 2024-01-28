@@ -16,12 +16,13 @@ typedef void (*bt_ready_cb_t)(int err);
 
 uint16_t test_1[] = { 0, 0, 0, 0};       // testing cap
 uint8_t date[] = {0,0,0,0,0,0,0,0};          // => day, month, year ; sec, minute, hour; timer conf, timer min
-uint8_t sense[] = {0,0};          // => temp
+uint8_t sense[] = {0,0,0,0,0,0,0,0};          // => temp
 
 uint8_t system_status[] = {0,0,0,0,0,0}; // => main loop counter, init returns, cdn
 
 static struct bt_conn *default_conn;
 
+static uint8_t is_ble_connected = 0;
 
 // TODO: write function with pointer to pass the buffer array
 static ssize_t read_test_char(struct bt_conn *conn, const struct bt_gatt_attr *attr,
@@ -62,6 +63,7 @@ static ssize_t write_date(struct bt_conn *conn, const struct bt_gatt_attr *attr,
 static ssize_t read_system_status(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                               void *buf, uint16_t len, uint16_t offset)
 {
+    update_sys();
     return bt_gatt_attr_read(conn, attr, buf, len, offset, system_status, (sizeof(system_status)*sizeof(uint8_t)));
 }
 
@@ -89,7 +91,10 @@ BT_GATT_SERVICE_DEFINE(test_svc,
 );
 
 
+void update_sys(){
+    system_status[1] = PCF8563_Get_Flag();
 
+}
 
 void update_value_cnt(uint16_t value){
     system_status[0] = value;
@@ -131,6 +136,7 @@ void configure_rtcData(void){
 void update_sense(void){
     uint8_t buf[2];
 
+    tmp102_wakeup();
     if(tmp102_readTempC(buf) == 0){
         sense[0] = buf[0];
         sense[1] = buf[1];
@@ -155,6 +161,7 @@ static void call_connected(struct bt_conn *conn, uint8_t err)
         // printk("Connected\n");
         if (!default_conn) {
             default_conn = bt_conn_ref(conn);
+            is_ble_connected = 0x01;
         }
     }
 }
@@ -162,10 +169,11 @@ static void call_connected(struct bt_conn *conn, uint8_t err)
 static void call_disconnected(struct bt_conn *conn, uint8_t reason)
 {
     // printk("Disconnected (reason %u)\n", reason);
-    if (default_conn) {
+    if (is_ble_connected == 0x01 && default_conn) {
         bt_conn_unref(default_conn);
+        PCF8563_Cleare_TF_Flag();
         default_conn = NULL;
-        // sys_reboot();
+        sys_reboot();
 
     }
 

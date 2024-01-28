@@ -12,7 +12,9 @@
 #define T_HIGH_REG 0x03
 
 int tmp102_init(void);
+void tmp102_wakeup(void);
 uint32_t tmp102_readTempC(uint8_t *buf);
+uint8_t tmp102_readRegister(bool registerNumber, uint8_t reg);
 
 
 

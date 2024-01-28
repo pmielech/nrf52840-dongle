@@ -24,7 +24,7 @@ uint8_t tmp102_readRegister(bool registerNumber, uint8_t reg)
 void tmp102_wakeup(void)
 {
   uint8_t registerByte; 
-  registerByte = readRegister(0, CONFIG_REG);
+  registerByte = tmp102_readRegister(0, CONFIG_REG);
   registerByte &= 0xFE; // Clear SD (bit 0 of first byte)
   I2C_writeByte_u(registerByte, CONFIG_REG, TMP102_ADDR);
 }

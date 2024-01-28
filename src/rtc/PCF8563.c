@@ -301,8 +301,8 @@ Info:
 ******************************************************************************/
 void PCF8563_Cleare_TF_Flag(void)
 {
-    //PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xfB);
-    PCF8563_IIC_Write_nd(CTRL_BUF2, PCF8563_IIC_Read_nd(CTRL_BUF2) & 0xfB);
+    PCF8563_IIC_Write(CTRL_BUF2, PCF8563_IIC_Read(CTRL_BUF2) & 0xfB);
+    //PCF8563_IIC_Write_nd(CTRL_BUF2, PCF8563_IIC_Read_nd(CTRL_BUF2) & 0xfB);
 
 }
 
