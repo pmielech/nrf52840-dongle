@@ -1,7 +1,7 @@
 
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/spi.h>
-
+#include <zephyr/sys/reboot.h>
 // #include <zephyr/drivers/rtc.h>
 
 #include "PCF8563.h"
@@ -74,7 +74,7 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb,
 {
 	PROGRAM_SESSION = 1u;
     //gpio_pin_toggle_dt(&led);
-	sys_reboot();
+	sys_reboot(0);
 	//k_msleep(SLEEP_TIME_MS);
 
     
@@ -94,11 +94,11 @@ int gpio_init(){
     gpio_add_callback(button.port, &button_cb_data);
 
 
-    ret += gpio_pin_configure_dt(&rtc_int, GPIO_INPUT);
+    ret += gpio_pin_configure_dt(&rtc_int, GPIO_INPUT | GPIO_PULL_UP);
 
 
     ret += gpio_pin_interrupt_configure_dt(&rtc_int,
-                          GPIO_INT_LEVEL_LOW);
+                          GPIO_INT_EDGE_FALLING);
 
     gpio_init_callback(&rtc_int_cb, gpio_rtc_callback, BIT(rtc_int.pin));
     gpio_add_callback(rtc_int.port, &rtc_int_cb);
@@ -147,13 +147,13 @@ int main(void)
 	if(ret > 0){
 
 	while(true){
-		sys_reboot();
+		sys_reboot(0);
 	}
 
 	} else {
 
 		
-		//PCF8563_Init();
+		//;
 
 		
 		while(true) 

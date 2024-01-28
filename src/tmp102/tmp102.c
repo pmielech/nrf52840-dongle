@@ -21,12 +21,23 @@ uint8_t tmp102_readRegister(bool registerNumber, uint8_t reg)
   return registerByte[registerNumber];
 }
 
+void tmp102_openPointerRegister(uint8_t pointerReg)
+{
+//   _i2cPort->beginTransmission(_address); // Connect to TMP102
+//   _i2cPort->write(pointerReg);           // Open specified register
+//   _i2cPort->endTransmission();           // Close communication with TMP102
+    I2C_writeByte_u(0, pointerReg, TMP102_ADDR);
+
+}
+
 void tmp102_wakeup(void)
 {
-  uint8_t registerByte; 
-  registerByte = tmp102_readRegister(0, CONFIG_REG);
-  registerByte &= 0xFE; // Clear SD (bit 0 of first byte)
-  I2C_writeByte_u(registerByte, CONFIG_REG, TMP102_ADDR);
+    uint8_t registerByte; 
+    tmp102_openPointerRegister(CONFIG_REG);
+
+    registerByte = tmp102_readRegister(0, CONFIG_REG);
+    registerByte &= 0xFE; // Clear SD (bit 0 of first byte)
+    I2C_writeByte_u(registerByte, CONFIG_REG, TMP102_ADDR);
 }
 
 
@@ -34,8 +45,12 @@ uint32_t tmp102_readTempC(uint8_t *buf)
 {
     uint8_t registerByte[2]; 
     int16_t digitalTemp;     
+    tmp102_openPointerRegister(TEMP_REG);
 
     I2C_readBytes_u(registerByte, 2, TEMP_REG, TMP102_ADDR);
+    #include "tmp102.h"
+
+
 
     *buf = registerByte[0];
     *(buf+1) = registerByte[1];

@@ -2,6 +2,7 @@
 #include "PCF8563.h"
 #include "tmp102.h"
 #include <zephyr/sys/util.h>
+#include <zephyr/sys/reboot.h>
 
 static K_SEM_DEFINE(bt_init_ok, 1, 1);
 typedef void (*bt_ready_cb_t)(int err);
@@ -91,7 +92,7 @@ BT_GATT_SERVICE_DEFINE(test_svc,
 );
 
 
-void update_sys(){
+void update_sys(void){
     system_status[1] = PCF8563_Get_Flag();
 
 }
@@ -122,13 +123,14 @@ void configure_rtcData(void){
     }
 
     if(date[6] != 0 || date[7] != 0){
+        PCF8563_Init();
         PCF8563_Set_Timer(date[6], date[7]);
-        PCF8563_Alarm_Enable();
+        PCF8563_Alarm_Disable();
         PCF8563_Timer_Enable();
 
     }
     else{
-        PCF8563_Timer_Disable();
+        //PCF8563_Timer_Disable();
     }
 
 }
@@ -173,7 +175,7 @@ static void call_disconnected(struct bt_conn *conn, uint8_t reason)
         bt_conn_unref(default_conn);
         PCF8563_Cleare_TF_Flag();
         default_conn = NULL;
-        sys_reboot();
+        sys_reboot(0);
 
     }
 

@@ -11,6 +11,7 @@
 #define T_LOW_REG 0x02
 #define T_HIGH_REG 0x03
 
+void tmp102_openPointerRegister(uint8_t pointerReg);
 int tmp102_init(void);
 void tmp102_wakeup(void);
 uint32_t tmp102_readTempC(uint8_t *buf);
