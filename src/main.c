@@ -1,7 +1,7 @@
 
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/spi.h>
-
+#include <zephyr/sys/reboot.h>
 // #include <zephyr/drivers/rtc.h>
 
 #include "PCF8563.h"
@@ -62,6 +62,8 @@ void gpio_rtc_callback(const struct device *dev, struct gpio_callback *cb,
 {
     gpio_pin_toggle_dt(&led);
 	// gpio_pin_toggle_dt(&pow_gpio);
+	//PCF8563_Cleare_AF_Flag();
+
     PROGRAM_SESSION = 1;
 
 }
@@ -71,8 +73,8 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb,
             uint32_t pins)
 {
 	PROGRAM_SESSION = 1u;
-    gpio_pin_toggle_dt(&led);
-	sys_reboot();
+    //gpio_pin_toggle_dt(&led);
+	sys_reboot(0);
 	//k_msleep(SLEEP_TIME_MS);
 
     
@@ -92,11 +94,11 @@ int gpio_init(){
     gpio_add_callback(button.port, &button_cb_data);
 
 
-    ret += gpio_pin_configure_dt(&rtc_int, GPIO_INPUT);
+    ret += gpio_pin_configure_dt(&rtc_int, GPIO_INPUT | GPIO_PULL_UP);
 
 
     ret += gpio_pin_interrupt_configure_dt(&rtc_int,
-                          GPIO_INT_EDGE_TO_INACTIVE);
+                          GPIO_INT_EDGE_FALLING);
 
     gpio_init_callback(&rtc_int_cb, gpio_rtc_callback, BIT(rtc_int.pin));
     gpio_add_callback(rtc_int.port, &rtc_int_cb);
@@ -111,12 +113,28 @@ int gpio_init(){
 	return ret;
 }
 
-void deep_sleep(void)
-{
-    k_cpu_idle();
+
+void normal_mode_loop(int *ret){
+	*ret += init_i2c();
+	*ret += bluetooth_init();
+	
+	
+
+	uint8_t flag_status = 0;
+	while (true)
+	{
+		k_msleep(10);
+		
+
+		// if(flag_status  & 0x02 && PROGRAM_SESSION == 1u){
+		// 	PCF8563_Cleare_TF_Flag();
+		// 	PROGRAM_SESSION = 0;
+		// 	update_system_status(flag_status, 1);
+		// }
+	}
+
+	
 }
-
-
 
 int main(void)
 {
@@ -129,27 +147,22 @@ int main(void)
 	if(ret > 0){
 
 	while(true){
-		sys_reboot();
+		sys_reboot(0);
 	}
 
 	} else {
 
 		
-		//PCF8563_Init();
+		//;
 
-
+		
 		while(true) 
 		{
-			
+			//PCF8563_Cleare_TF_Flag();
         	k_cpu_idle();
 
 			if(PROGRAM_SESSION == 1u){
-				ret += init_i2c();
-				ret += bluetooth_init();
-				while (true)
-				{
-					k_msleep(10);
-				}
+				normal_mode_loop(&ret);
 			}
 
 

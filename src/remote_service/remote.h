@@ -11,5 +11,6 @@ void update_system_status(uint16_t value, int idx);
 void update_value(uint16_t value1, uint16_t value2, uint16_t value3);
 void configure_rtcData(void);
 void update_datetime(void);
-
+void update_sense(void);
+void update_sys(void);
 

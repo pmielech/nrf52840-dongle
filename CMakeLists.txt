@@ -24,8 +24,13 @@ target_sources(app PRIVATE
     src/rtc/PCF8563.c
 )
 
+target_sources(app PRIVATE 
+    src/tmp102/tmp102.c
+)
+
 
 zephyr_library_include_directories(src/remote_service)
 zephyr_library_include_directories(src/user_peripherial)
 zephyr_library_include_directories(src/rtc)
+zephyr_library_include_directories(src/tmp102)
 

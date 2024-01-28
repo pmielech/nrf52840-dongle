@@ -18,6 +18,13 @@ int init_i2c(void)
 	return 0;
 }
 
+uint8_t I2C_readBytes_u(uint8_t *buf, uint8_t bytes_n, uint8_t reg, uint16_t addr){
+
+    i2c_read(i2c0_device, buf, bytes_n, addr);
+
+    return 0;
+}
+
 
 uint8_t I2C_writeByte_u(uint8_t value, uint8_t reg, uint16_t addr){
 
