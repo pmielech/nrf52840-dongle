@@ -1,0 +1,878 @@
+[
+    {
+        "id": "710c36b26ecd15a7",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "107e2e93b29b3015",
+        "type": "Generic BLE in",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "genericBle": "e34b3e61ec4508cc",
+        "useString": false,
+        "notification": true,
+        "x": 440,
+        "y": 180,
+        "wires": [
+            [
+                "797a7b3acc331b1a"
+            ]
+        ]
+    },
+    {
+        "id": "042c219b7ae07c07",
+        "type": "debug",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "8a01e54f08c0c0ca",
+        "type": "function",
+        "z": "710c36b26ecd15a7",
+        "name": "TempExtraction",
+        "func": "// Przykładowa funkcja w węźle Function Node-RED\n\n// Pobierz dane wejściowe z wiadomości\n// Pobierz dane wejściowe z wiadomości\nvar inputData = msg.payload;\n\n// Sprawdź, czy dane wejściowe są zgodne z oczekiwaniami\nif (inputData && inputData.characteristics && inputData.characteristics[\"5678\"]) {\n    \n    var extractedValue1 = inputData.characteristics[\"6600\"][0];\n    var extractedValue2 = inputData.characteristics[\"6600\"][1];\n\n    // Przygotuj nową wiadomość z wyodrębnioną wartością\n\n\n\n    msg.payload = ((extractedValue1 << 4) + (extractedValue2 >> 4))*0.0625;\n\n    //msg.payload = (Math.floor(Math.random() * 50) + 2300)/100;\n    // Prześlij wiadomość dalej\n    return msg;\n} else {\n    // W przypadku błędnych danych, zwróć pustą wiadomość\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 300,
+        "wires": [
+            [
+                "e50a5e56147631c2",
+                "e96949257837c0c8",
+                "f2ba8af0d8efbfcc",
+                "aad4e19760fd02bc",
+                "f8f2262d0be1e0cd",
+                "4e62a6dd6e558a19"
+            ]
+        ]
+    },
+    {
+        "id": "e96949257837c0c8",
+        "type": "debug",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "3309f34d03f1eab5",
+        "type": "inject",
+        "z": "710c36b26ecd15a7",
+        "name": "Disconnect",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "disconnect",
+        "payload": "disconnect",
+        "payloadType": "str",
+        "x": 100,
+        "y": 300,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "c740efc67f2d6cc7",
+        "type": "inject",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 120,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "2e1f61ada72443e3",
+        "type": "ui_button",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 5,
+        "width": "5",
+        "height": "1",
+        "passthru": false,
+        "label": "Disconnect",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "disconnect",
+        "payloadType": "str",
+        "topic": "disconnect",
+        "topicType": "str",
+        "x": 90,
+        "y": 340,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "2d50bdf28105a48b",
+        "type": "ui_button",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 2,
+        "width": "5",
+        "height": "1",
+        "passthru": false,
+        "label": "Connect",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "",
+        "topicType": "str",
+        "x": 100,
+        "y": 160,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "9d017943fd6157e9",
+        "type": "ui_gauge",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 9,
+        "width": "7",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Puls",
+        "label": "bpm",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "250",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1090,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "e50a5e56147631c2",
+        "type": "ui_chart",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 6,
+        "width": "7",
+        "height": "5",
+        "label": "Temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "30",
+        "removeOlder": "1",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#f97706",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1130,
+        "y": 300,
+        "wires": [
+            []
+        ],
+        "icon": "font-awesome/fa-line-chart"
+    },
+    {
+        "id": "8005a0e6caae41f8",
+        "type": "ui_chart",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 8,
+        "width": "7",
+        "height": "5",
+        "label": "Puls ",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "250",
+        "removeOlder": "20",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#f97706",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1090,
+        "y": 620,
+        "wires": [
+            []
+        ],
+        "icon": "font-awesome/fa-line-chart"
+    },
+    {
+        "id": "c34b6e1ee51b8be9",
+        "type": "function",
+        "z": "710c36b26ecd15a7",
+        "name": "PulsExtraction",
+        "func": "// Przykładowa funkcja w węźle Function Node-RED\n\n// Pobierz dane wejściowe z wiadomości\n// Pobierz dane wejściowe z wiadomości\nvar inputData = msg.payload;\n\n// Sprawdź, czy dane wejściowe są zgodne z oczekiwaniami\nif (inputData && inputData.characteristics && inputData.characteristics[\"5678\"]) {\n    // Pobierz wartość 154 z tablicy \"5678\"\n    var extractedValue = inputData.characteristics[\"5678\"][0];\n\n    // Przygotuj nową wiadomość z wyodrębnioną wartością\n    //msg.payload = extractedValue;\n    msg.payload = Math.floor(Math.random() * 10) + 60;\n\n    // Prześlij wiadomość dalej\n    return msg;\n} else {\n    // W przypadku błędnych danych, zwróć pustą wiadomość\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 540,
+        "wires": [
+            [
+                "9d017943fd6157e9",
+                "8005a0e6caae41f8",
+                "89a070a9f70d8d84",
+                "fa3cbd20e95ea26a"
+            ]
+        ]
+    },
+    {
+        "id": "f2ba8af0d8efbfcc",
+        "type": "ui_chart",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "1da0489bdb0d0abf",
+        "order": 1,
+        "width": "12",
+        "height": "5",
+        "label": "Temperatura",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "30",
+        "removeOlder": "1",
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#f97706",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1130,
+        "y": 340,
+        "wires": [
+            []
+        ],
+        "icon": "font-awesome/fa-line-chart"
+    },
+    {
+        "id": "89a070a9f70d8d84",
+        "type": "ui_chart",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "e5a6cd9225374052",
+        "order": 2,
+        "width": "12",
+        "height": "5",
+        "label": "Puls ",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "200",
+        "removeOlder": "20",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#f97706",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1090,
+        "y": 720,
+        "wires": [
+            []
+        ],
+        "icon": "font-awesome/fa-line-chart"
+    },
+    {
+        "id": "8eed5ee6ed390f40",
+        "type": "ui_button",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "17e3d4d04a1c934b",
+        "order": 2,
+        "width": "4",
+        "height": "1",
+        "passthru": false,
+        "label": "Connect",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "",
+        "topicType": "str",
+        "x": 100,
+        "y": 200,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "a99a16a819c8a866",
+        "type": "ui_button",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "17e3d4d04a1c934b",
+        "order": 5,
+        "width": "4",
+        "height": "1",
+        "passthru": false,
+        "label": "Disconnect",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "disconnect",
+        "payloadType": "str",
+        "topic": "disconnect",
+        "topicType": "str",
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "fa3cbd20e95ea26a",
+        "type": "ui_gauge",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "a8bfe6001f9f8b1d",
+        "order": 2,
+        "width": "9",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Puls",
+        "label": "bpm",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "250",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1090,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "1a4a2c1261b53549",
+        "type": "inject",
+        "z": "710c36b26ecd15a7",
+        "name": "Connect",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 100,
+        "y": 240,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "792d6d66985d74a3",
+        "type": "function",
+        "z": "710c36b26ecd15a7",
+        "name": "function 1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 240,
+        "wires": [
+            [
+                "107e2e93b29b3015"
+            ]
+        ]
+    },
+    {
+        "id": "aad4e19760fd02bc",
+        "type": "ui_gauge",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "a8bfe6001f9f8b1d",
+        "order": 1,
+        "width": "9",
+        "height": "3",
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "30",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1150,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "f8f2262d0be1e0cd",
+        "type": "ui_gauge",
+        "z": "710c36b26ecd15a7",
+        "name": "",
+        "group": "cab599dbfbf2fbec",
+        "order": 7,
+        "width": "7",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "30",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1170,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "797a7b3acc331b1a",
+        "type": "function",
+        "z": "710c36b26ecd15a7",
+        "name": "function 2",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 240,
+        "wires": [
+            [
+                "c34b6e1ee51b8be9",
+                "8a01e54f08c0c0ca",
+                "042c219b7ae07c07"
+            ]
+        ]
+    },
+    {
+        "id": "4e62a6dd6e558a19",
+        "type": "function",
+        "z": "710c36b26ecd15a7",
+        "name": "resetNordic",
+        "func": "// Przykładowa funkcja w węźle Function Node-RED\n\n// Pobierz dane wejściowe z wiadomości\n// Pobierz dane wejściowe z wiadomości\nvar inputData = msg.payload;\n\n// Sprawdź, czy dane wejściowe są zgodne z oczekiwaniami\nwhile(true){\n    if (inputData != null) {\n        msg.topic = \"disconnect\";\n        return msg;\n    }\n\n}\n\n// } else {\n//     // W przypadku błędnych danych, zwróć pustą wiadomość\n    \n//     return msg;\n// }",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 80,
+        "wires": [
+            [
+                "792d6d66985d74a3"
+            ]
+        ]
+    },
+    {
+        "id": "37a181c13ad160cb",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "1da0489bdb0d0abf",
+        "order": 6,
+        "width": "10",
+        "height": "1"
+    },
+    {
+        "id": "5bd7606dc3443aba",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "cab599dbfbf2fbec",
+        "order": 1,
+        "width": "1",
+        "height": "1"
+    },
+    {
+        "id": "9f9e025a39583d8b",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "cab599dbfbf2fbec",
+        "order": 3,
+        "width": "1",
+        "height": "1"
+    },
+    {
+        "id": "6b9115ce850b510e",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "cab599dbfbf2fbec",
+        "order": 4,
+        "width": "1",
+        "height": "1"
+    },
+    {
+        "id": "057a04a21445557a",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "e5a6cd9225374052",
+        "order": 3,
+        "width": "10",
+        "height": "1"
+    },
+    {
+        "id": "c6bd96c9f159665e",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "17e3d4d04a1c934b",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "994d8380c0026005",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "17e3d4d04a1c934b",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "20972ef86490a4eb",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "17e3d4d04a1c934b",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c01efad8ea84067e",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "17e3d4d04a1c934b",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8e3d5423e0837bf9",
+        "type": "ui_spacer",
+        "z": "710c36b26ecd15a7",
+        "name": "spacer",
+        "group": "17e3d4d04a1c934b",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e34b3e61ec4508cc",
+        "type": "Generic BLE",
+        "localName": "nrf_bulbulator",
+        "address": "",
+        "uuid": "e90501c1950e9d85fbaac67a08d6fb9b",
+        "characteristics": [
+            {
+                "uuid": "5678",
+                "name": "<Unnamed>",
+                "type": "(Custom Type)",
+                "notifiable": true,
+                "readable": true,
+                "writable": false,
+                "writeWithoutResponse": false
+            },
+            {
+                "uuid": "2220",
+                "name": "<Unnamed>",
+                "type": "(Custom Type)",
+                "notifiable": true,
+                "readable": true,
+                "writable": false,
+                "writeWithoutResponse": false
+            },
+            {
+                "uuid": "6660",
+                "name": "<Unnamed>",
+                "type": "(Custom Type)",
+                "notifiable": false,
+                "readable": true,
+                "writable": true,
+                "writeWithoutResponse": false
+            },
+            {
+                "uuid": "6600",
+                "name": "<Unnamed>",
+                "type": "(Custom Type)",
+                "notifiable": true,
+                "readable": true,
+                "writable": false,
+                "writeWithoutResponse": false
+            }
+        ]
+    },
+    {
+        "id": "cab599dbfbf2fbec",
+        "type": "ui_group",
+        "name": "WYKRESY",
+        "tab": "7c23d3ac8f1931fa",
+        "order": 1,
+        "disp": true,
+        "width": "7",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1da0489bdb0d0abf",
+        "type": "ui_group",
+        "name": "TEMPERATURA",
+        "tab": "322664693d8403ac",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e5a6cd9225374052",
+        "type": "ui_group",
+        "name": "PULS",
+        "tab": "322664693d8403ac",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "17e3d4d04a1c934b",
+        "type": "ui_group",
+        "name": "Sterowanie ",
+        "tab": "322664693d8403ac",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a8bfe6001f9f8b1d",
+        "type": "ui_group",
+        "name": "POMIARY",
+        "tab": "322664693d8403ac",
+        "order": 4,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7c23d3ac8f1931fa",
+        "type": "ui_tab",
+        "name": "Smartphone",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "322664693d8403ac",
+        "type": "ui_tab",
+        "name": "PC",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    }
+]
